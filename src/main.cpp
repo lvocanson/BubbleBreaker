@@ -1,7 +1,12 @@
 #include <SFML/Graphics.hpp>
+#include "Utils/Logger.h"
+#include <iostream>
 
 int main()
 {
+    Logger::Create(std::cout);
+    Logger::Instance() << "Opening window...\n";
+
     sf::RenderWindow window;
     window.create(sf::VideoMode({1600u, 900u}), "BubbleBreaker");
     window.setFramerateLimit(144u);
@@ -12,6 +17,7 @@ int main()
         {
             if (event->is<sf::Event::Closed>())
             {
+                Logger::Instance() << "Close event received. Closing window...\n";
                 window.close();
             }
         }
