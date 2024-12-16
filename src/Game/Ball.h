@@ -10,10 +10,13 @@ public:
 
 	void SetVelocity(sf::Vector2f vel) { m_Velocity = vel; }
 
+	void CheckForCollision(sf::FloatRect rectangle);
+
 private:
 
 	sf::Sprite m_Sprite;
 	sf::Vector2f m_Velocity;
+	float m_SpeedFactor;
 
 private:
 

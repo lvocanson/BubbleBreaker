@@ -14,6 +14,7 @@ private:
 	sf::Sprite m_Sprite;
 	sf::Keyboard::Key  m_LeftKey;
 	sf::Keyboard::Key m_RigthKey;
+	float m_Speed;
 
 private:
 
