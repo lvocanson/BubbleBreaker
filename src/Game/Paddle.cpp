@@ -1,5 +1,10 @@
 #include "Paddle.h"
 
+Paddle::Paddle(const sf::Texture texture, const sf::IntRect& rect)
+	: m_Sprite(texture, rect)
+{
+}
+
 void Paddle::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(m_Sprite, states);
@@ -7,5 +12,12 @@ void Paddle::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Paddle::Update(float dt)
 {
-	// TODO: Inputs
+	if (sf::Keyboard::isKeyPressed(m_leftKey))
+	{
+
+	}
+	else if (sf::Keyboard::isKeyPressed(m_rigthKey))
+	{
+
+	}
 }

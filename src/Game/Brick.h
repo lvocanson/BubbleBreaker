@@ -8,6 +8,8 @@ public:
 
 	Brick(const sf::Texture texture, const sf::IntRect& rect, unsigned int hp);
 
+	void LooseHp(int qty);
+
 private:
 
 	sf::Sprite m_Sprite;
