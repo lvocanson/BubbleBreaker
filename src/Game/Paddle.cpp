@@ -1,8 +1,9 @@
 #include "Paddle.h"
 
-Paddle::Paddle(const sf::Texture texture, const sf::IntRect& rect)
-	: m_Sprite(texture, rect)
+Paddle::Paddle(const sf::Texture texture, sf::Vector2f position)
+	: m_Sprite(texture)
 {
+	m_Sprite.setPosition(position);
 }
 
 void Paddle::draw(sf::RenderTarget& target, sf::RenderStates states) const

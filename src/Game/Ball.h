@@ -6,7 +6,7 @@ class Ball : public sf::Drawable, public IUpdatable
 {
 public:
 
-	Ball(const sf::Texture& texture, const sf::IntRect rect);
+	Ball(const sf::Texture& texture, sf::Vector2f position);
 
 	void SetVelocity(sf::Vector2f vel) { m_Velocity = vel; }
 

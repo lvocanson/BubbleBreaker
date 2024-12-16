@@ -1,10 +1,11 @@
 #include "Brick.h"
 #include <SFML/Graphics.hpp>
 
-Brick::Brick(const sf::Texture texture, const sf::IntRect& rect, unsigned int hp)
-	: m_Sprite(texture, rect)
+Brick::Brick(const sf::Texture texture, sf::Vector2f position, unsigned int hp)
+	: m_Sprite(texture)
 	, m_Hp(hp)
 {
+	m_Sprite.setPosition(position);
 }
 
 void Brick::LooseHp(int qty)
