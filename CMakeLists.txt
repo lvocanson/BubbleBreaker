@@ -21,6 +21,8 @@ add_executable(${PROJECT_NAME})
 file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS "src/*.cpp")
 file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "src/*.h")
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES} ${HEADER_FILES})
+include_directories("src")
+
 
 # Multi-processor compilation
 if (MSVC)

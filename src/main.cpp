@@ -11,8 +11,11 @@ int main()
     window.create(sf::VideoMode({1600u, 900u}), "BubbleBreaker");
     window.setFramerateLimit(144u);
 
+    sf::Clock clock;
+
     while (window.isOpen())
     {
+        // Window events
         while (const std::optional event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
@@ -22,6 +25,10 @@ int main()
             }
         }
 
+        // Update
+        float dt = clock.restart().asSeconds();
+
+        // Draw
         window.clear();
         window.display();
     }
