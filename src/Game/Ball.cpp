@@ -102,14 +102,7 @@ void Ball::CheckForCollision(sf::FloatRect rectangle)
 	}
 }
 
-void Ball::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw(m_Sprite, states);
-}
-
 void Ball::Update(float dt)
 {
-	auto pos = m_Sprite.getPosition();
-	pos += dt * m_Velocity;
-	m_Sprite.setPosition(pos);
+	m_Sprite.move(m_Velocity * dt);
 }

@@ -1,6 +1,7 @@
 #include "Paddle.h"
 #include "Core/Resources.h"
 #include "Core/ResourcesManager.h"
+#include <SFML/Graphics.hpp>
 
 Paddle::Paddle(sf::Vector2f position, sf::Keyboard::Key leftKey, sf::Keyboard::Key rightKey)
 	: m_Sprite(ResourcesManager::Instance().GetTexture(Resources::PaddleTexture)), m_LeftKey(leftKey), m_RigthKey(rightKey)
@@ -14,11 +15,6 @@ Paddle::Paddle(sf::Vector2f position, sf::Keyboard::Key leftKey, sf::Keyboard::K
 	};
 	m_Sprite.setScale(newScale);
 	m_Sprite.setPosition(position);
-}
-
-void Paddle::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw(m_Sprite, states);
 }
 
 void Paddle::Update(float dt)

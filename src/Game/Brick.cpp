@@ -32,7 +32,3 @@ void Brick::LooseHp(int qty)
 	}
 }
 
-void Brick::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw(m_Sprite, states);
-}

@@ -1,8 +1,7 @@
 #pragma once
-#include "Core/IUpdatable.h"
 #include <SFML/Graphics.hpp>
 
-class Brick : public sf::Drawable
+class Brick
 {
 public:
 
@@ -10,8 +9,7 @@ public:
 
 	void LooseHp(int qty);
 
-	// Inherited via Drawable
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(m_Sprite, states); }
 
 private:
 

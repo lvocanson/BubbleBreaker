@@ -1,8 +1,7 @@
 #pragma once
-#include "Core/IUpdatable.h"
 #include <SFML/Graphics.hpp>
 
-class Ball : public sf::Drawable, public IUpdatable
+class Ball
 {
 public:
 
@@ -12,15 +11,11 @@ public:
 
 	void CheckForCollision(sf::FloatRect rectangle);
 
-	// Inherited via Drawable
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-	// Inherited via IUpdatable
-	void Update(float dt) override;
+	void Update(float dt);
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(m_Sprite, states);	}
 
 private:
 
 	sf::Sprite m_Sprite;
 	sf::Vector2f m_Velocity;
-	float m_SpeedFactor;
 };
