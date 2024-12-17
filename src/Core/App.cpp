@@ -1,5 +1,4 @@
 #include "App.h"
-#include "IUpdatable.h"
 #include "Game/SoloGame.h"
 #include "Resources.h"
 #include "ResourcesManager.h"
@@ -29,7 +28,12 @@ App::App(int argc, char* argv[])
 		return;
 	}
 
-	NewGame<SoloGame>();
+	m_Game = std::make_unique<SoloGame>();
+	if (!m_Game.get())
+	{
+		Logger::Instance() << "Failed: game creation.\n";
+		return;
+	}
 
 	m_IsReadyToRun = true;
 }
@@ -53,54 +57,6 @@ int App::Run()
 	return EXIT_SUCCESS;
 }
 
-template <typename G, typename... Args>
-	requires std::derived_from<G, Game>&& std::constructible_from<G, Args...>
-inline void App::NewGame(Args&&... args)
-{
-	m_Game = std::make_unique<G>(std::forward<Args>(args)...);
-
-	using namespace std::placeholders;
-	m_Game->OnUpdatableCreated = std::bind(&App::AddUpdatable, this, _1);
-	m_Game->OnUpdatableDestroyed = std::bind(&App::RemoveUpdatable, this, _1);
-	m_Game->OnDrawableCreated = std::bind(&App::AddDrawable, this, _1);
-	m_Game->OnDrawableDestroyed = std::bind(&App::RemoveDrawable, this, _1);
-
-	m_Game->Init();
-}
-
-void App::AddUpdatable(std::weak_ptr<IUpdatable>& updatable)
-{
-	m_Updatables.emplace_back(updatable);
-}
-
-void App::RemoveUpdatable(std::weak_ptr<IUpdatable>& updatable)
-{
-	for (auto it = m_Updatables.begin(); it != m_Updatables.end(); ++it)
-	{
-		if (it->lock() == updatable.lock())
-		{
-			m_Updatables.erase(it);
-			break;
-		}
-	}
-}
-
-void App::AddDrawable(std::weak_ptr<sf::Drawable>& drawable)
-{
-	m_Drawables.emplace_back(drawable);
-}
-
-void App::RemoveDrawable(std::weak_ptr<sf::Drawable>& drawable)
-{
-	for (auto it = m_Drawables.begin(); it != m_Drawables.end(); ++it)
-	{
-		if (it->lock() == drawable.lock())
-		{
-			m_Drawables.erase(it);
-			break;
-		}
-	}
-}
 
 void App::PollEvents()
 {
@@ -116,35 +72,13 @@ void App::PollEvents()
 
 void App::Update()
 {
-	float dt = m_FrameClock.restart().asSeconds();
-	for (size_t i = 0; i < m_Updatables.size(); ++i)
-	{
-		if (auto locked = m_Updatables[i].lock())
-		{
-			locked->Update(dt);
-		}
-		else
-		{
-			m_Updatables.erase(m_Updatables.begin() + i);
-			--i;
-		}
-	}
+	const float dt = m_FrameClock.restart().asSeconds();
+	m_Game->Update(dt);
 }
 
 void App::Draw()
 {
 	m_Window.clear();
-	for (size_t i = 0; i < m_Drawables.size(); ++i)
-	{
-		if (auto locked = m_Drawables[i].lock())
-		{
-			m_Window.draw(*locked.get());
-		}
-		else
-		{
-			m_Drawables.erase(m_Drawables.begin() + i);
-			--i;
-		}
-	}
+	m_Window.draw(*m_Game.get());
 	m_Window.display();
 }

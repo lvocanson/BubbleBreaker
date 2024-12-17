@@ -1,9 +1,14 @@
 #pragma once
 #include "Core/Game.h"
+#include "Ball.h"
+#include "Brick.h"
+#include "Paddle.h"
 
-class Ball;
-class Brick;
-class Paddle;
+namespace sf
+{
+class RenderTarget;
+class RenderStates;
+}
 
 class SoloGame : public Game
 {
@@ -14,10 +19,13 @@ public:
 
 private:
 
-	std::weak_ptr<Ball> m_Ball;
-	std::weak_ptr<Brick> m_Brick;
-	std::weak_ptr<Paddle> m_Paddle;
+	std::unique_ptr<Ball> m_Ball;
+	std::unique_ptr<Brick> m_Brick;
+	std::unique_ptr<Paddle> m_Paddle;
+
+private:
 
 	// Inherited via Game
-	void Init() override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void Update(float dt) override;
 };

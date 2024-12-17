@@ -10,13 +10,11 @@ public:
 
 	void LooseHp(int qty);
 
+	// Inherited via Drawable
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
 private:
 
 	sf::Sprite m_Sprite;
 	int m_Hp;
-
-private:
-
-	// Inherited via Drawable
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

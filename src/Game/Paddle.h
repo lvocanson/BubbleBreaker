@@ -9,17 +9,15 @@ public:
 
 	Paddle(sf::Vector2f position, sf::Keyboard::Key leftKey, sf::Keyboard::Key rightKey);
 
-private:
-
-	sf::Sprite m_Sprite;
-	sf::Keyboard::Key  m_LeftKey;
-	sf::Keyboard::Key m_RigthKey;
-
-private:
-
 	// Inherited via Drawable
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	// Inherited via IUpdatable
 	void Update(float dt) override;
+
+private:
+
+	sf::Sprite m_Sprite;
+	sf::Keyboard::Key  m_LeftKey;
+	sf::Keyboard::Key m_RigthKey;
 };
