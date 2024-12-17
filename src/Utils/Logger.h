@@ -20,8 +20,7 @@ public:
 		requires std::constructible_from<L, Args...>
 	static void Create(Args&&... args)
 	{
-		Destroy();
-		s_Instance = new L(std::forward<Args>(args)...);
+		s_Instance = std::make_unique<L>(std::forward<Args>(args)...);
 	}
 
 	/**
@@ -36,15 +35,15 @@ public:
 	 *
 	 * This method safely deletes the current logger instance if it exists.
 	 */
-	static void Destroy();
+	static void Destroy() { s_Instance.release(); }
 
 public:
 
 	Logger(std::ostream& output);
-	virtual ~Logger() = default;
+	virtual ~Logger();
 
 protected:
 
-	static inline Logger* s_Instance = nullptr;
+	static inline std::unique_ptr<Logger> s_Instance;
 	std::ostream& m_Output;
 };
