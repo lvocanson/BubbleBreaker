@@ -39,6 +39,7 @@ void Ball::CheckForCollision(sf::FloatRect rectangle)
 		sf::Vector2f vect(rectangle.size.x / 2 + radius - m_Velocity.x * ((ballSpeed - distRight) / ballSpeed), 0);
 		m_Sprite.setPosition(m_Sprite.getPosition() + vect);
 		m_Velocity.x = -m_Velocity.x;
+		return;
 	}
 
 	if (distance.y <= (rectangle.size.y / 2))
@@ -47,6 +48,7 @@ void Ball::CheckForCollision(sf::FloatRect rectangle)
 		sf::Vector2f vect(0, rectangle.size.y / 2 + radius - m_Velocity.y * ((ballSpeed - distBottom) / ballSpeed));
 		m_Sprite.setPosition(m_Sprite.getPosition() + vect);
 		m_Velocity.y = -m_Velocity.y;
+		return;
 	}
 
 	const float distFromCircleToRect = powf((distance.x - rectangle.size.x / 2), 2) + powf((distance.y - rectangle.size.y / 2), 2);

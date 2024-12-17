@@ -17,7 +17,7 @@ namespace Resources
 		BackgroundTexture
 	};
 
-	static constexpr sf::Color BrickColors[4]
+	static constexpr auto BrickColors = std::array
 	{
 		sf::Color::White,
 		sf::Color::Blue,

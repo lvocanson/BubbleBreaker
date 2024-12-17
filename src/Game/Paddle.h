@@ -7,7 +7,7 @@ class Paddle : public sf::Drawable, public IUpdatable
 {
 public:
 
-	Paddle(sf::Vector2f position);
+	Paddle(sf::Vector2f position, sf::Keyboard::Key leftKey, sf::Keyboard::Key rightKey, float m_Speed);
 
 private:
 
