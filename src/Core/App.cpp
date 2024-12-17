@@ -64,38 +64,40 @@ inline void App::NewGame(Args&&... args)
 	m_Game->OnUpdatableDestroyed = std::bind(&App::RemoveUpdatable, this, _1);
 	m_Game->OnDrawableCreated = std::bind(&App::AddDrawable, this, _1);
 	m_Game->OnDrawableDestroyed = std::bind(&App::RemoveDrawable, this, _1);
+
+	m_Game->Init();
 }
 
-void App::AddUpdatable(IUpdatable& updatable)
+void App::AddUpdatable(std::weak_ptr<IUpdatable>& updatable)
 {
 	m_Updatables.emplace_back(updatable);
 }
 
-void App::RemoveUpdatable(IUpdatable& updatable)
+void App::RemoveUpdatable(std::weak_ptr<IUpdatable>& updatable)
 {
 	for (auto it = m_Updatables.begin(); it != m_Updatables.end(); ++it)
 	{
-		if (&(*it).get() == &updatable)
+		if (it->lock() == updatable.lock())
 		{
 			m_Updatables.erase(it);
-			return;
+			break;
 		}
 	}
 }
 
-void App::AddDrawable(sf::Drawable& drawable)
+void App::AddDrawable(std::weak_ptr<sf::Drawable>& drawable)
 {
 	m_Drawables.emplace_back(drawable);
 }
 
-void App::RemoveDrawable(sf::Drawable& drawable)
+void App::RemoveDrawable(std::weak_ptr<sf::Drawable>& drawable)
 {
 	for (auto it = m_Drawables.begin(); it != m_Drawables.end(); ++it)
 	{
-		if (&(*it).get() == &drawable)
+		if (it->lock() == drawable.lock())
 		{
 			m_Drawables.erase(it);
-			return;
+			break;
 		}
 	}
 }
@@ -115,18 +117,34 @@ void App::PollEvents()
 void App::Update()
 {
 	float dt = m_FrameClock.restart().asSeconds();
-	for (IUpdatable& updatable : m_Updatables)
+	for (size_t i = 0; i < m_Updatables.size(); ++i)
 	{
-		updatable.Update(dt);
+		if (auto locked = m_Updatables[i].lock())
+		{
+			locked->Update(dt);
+		}
+		else
+		{
+			m_Updatables.erase(m_Updatables.begin() + i);
+			--i;
+		}
 	}
 }
 
 void App::Draw()
 {
 	m_Window.clear();
-	for (sf::Drawable& drawable : m_Drawables)
+	for (size_t i = 0; i < m_Drawables.size(); ++i)
 	{
-		m_Window.draw(drawable);
+		if (auto locked = m_Drawables[i].lock())
+		{
+			m_Window.draw(*locked.get());
+		}
+		else
+		{
+			m_Drawables.erase(m_Drawables.begin() + i);
+			--i;
+		}
 	}
 	m_Window.display();
 }

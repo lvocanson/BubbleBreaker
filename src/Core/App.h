@@ -1,5 +1,5 @@
 #pragma once
-#include "Game.h";
+#include "Game.h"
 #include <SFML/Graphics.hpp>
 
 class IUpdatable;
@@ -17,10 +17,10 @@ private:
 		requires std::derived_from<G, Game> && std::constructible_from<G, Args...>
 	void NewGame(Args&&... args);
 
-	void AddUpdatable(IUpdatable&);
-	void RemoveUpdatable(IUpdatable&);
-	void AddDrawable(sf::Drawable&);
-	void RemoveDrawable(sf::Drawable&);
+	void AddUpdatable(std::weak_ptr<IUpdatable>&);
+	void RemoveUpdatable(std::weak_ptr<IUpdatable>&);
+	void AddDrawable(std::weak_ptr<sf::Drawable>&);
+	void RemoveDrawable(std::weak_ptr<sf::Drawable>&);
 
 	void PollEvents();
 	void Update();
@@ -33,6 +33,6 @@ private:
 	sf::Clock m_FrameClock;
 
 	std::unique_ptr<Game> m_Game;
-	std::vector<std::reference_wrapper<IUpdatable>> m_Updatables;
-	std::vector<std::reference_wrapper<sf::Drawable>> m_Drawables;
+	std::vector<std::weak_ptr<IUpdatable>> m_Updatables;
+	std::vector<std::weak_ptr<sf::Drawable>> m_Drawables;
 };

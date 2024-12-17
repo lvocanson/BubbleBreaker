@@ -6,7 +6,7 @@ class Brick : public sf::Drawable
 {
 public:
 
-	Brick(sf::Vector2f position, unsigned int hp);
+	Brick(sf::Vector2f position, int hp);
 
 	void LooseHp(int qty);
 

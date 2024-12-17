@@ -5,6 +5,14 @@
 Ball::Ball(sf::Vector2f position)
 	: m_Sprite(ResourcesManager::Instance().GetTexture(Resources::BallTexture))
 {
+	const auto currentSize = m_Sprite.getLocalBounds().size;
+	const auto currentScale = m_Sprite.getScale();
+	const sf::Vector2f newScale
+	{
+		(Resources::BallSize.x / currentSize.x) * currentScale.x,
+		(Resources::BallSize.y / currentSize.y) * currentScale.y
+	};
+	m_Sprite.setScale(newScale);
 	m_Sprite.setPosition(position);
 }
 
