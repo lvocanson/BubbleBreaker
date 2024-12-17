@@ -11,57 +11,78 @@ void Ball::CheckForCollision(sf::FloatRect rectangle)
 	sf::Vector2f distance;
 	distance.x = abs(m_Sprite.getPosition().x - rectangle.position.x);
 	distance.y = abs(m_Sprite.getPosition().y - rectangle.position.y);
-	float radius = m_Sprite.getTextureRect().size.x;
+
+	const float radius = m_Sprite.getTextureRect().size.x;
+	const float ballSpeed = sqrt(m_Velocity.x * m_Velocity.x + m_Velocity.y * m_Velocity.y); // get ball speed relative to bat
 
 	if (distance.x > (rectangle.size.x / 2 + radius)) return;
 	if (distance.y > (rectangle.size.y / 2 + radius)) return;
 
-	float ballSpeed = sqrt(m_Velocity.x * m_Velocity.x + m_Velocity.y * m_Velocity.y); // get ball speed relative to bat
+	// bat now only has a bottom, right sides and bottom right corner
+	const float distY = ((rectangle.size.y / 2 + radius) - m_Sprite.getPosition().y); // distance from bottom 
+	const float distX = ((rectangle.size.x / 2 + radius) - m_Sprite.getPosition().x); // distance from right
+
+	// get x location of intercept for bottom of bat
+	const float bottomX = m_Sprite.getPosition().x + (m_Velocity.x / m_Velocity.y) * distY;
+
+	// get y location of intercept for right of bat
+	const float rightY = m_Sprite.getPosition().y + (m_Velocity.y / m_Velocity.x) * distX;
+
+	const float distRight = powf((distance.x - rectangle.size.x / 2), 2) + powf((distance.y - rectangle.size.y / 2), 2);
+	const float distBottom = powf((distance.x - rectangle.size.x / 2), 2) + powf((distance.y - rectangle.size.y / 2), 2);
 
 	if (distance.x <= (rectangle.size.x / 2))
 	{
 		//vertical collision
+		sf::Vector2f vect(rectangle.size.x / 2 + radius - m_Velocity.x * ((ballSpeed - distRight) / ballSpeed), 0);
+		m_Sprite.setPosition(m_Sprite.getPosition() + vect);
+		m_Velocity.x = -m_Velocity.x;
 	}
 
 	if (distance.y <= (rectangle.size.y / 2))
 	{
 		//horizontal collision
+		sf::Vector2f vect(0, rectangle.size.y / 2 + radius - m_Velocity.y * ((ballSpeed - distBottom) / ballSpeed));
+		m_Sprite.setPosition(m_Sprite.getPosition() + vect);
+		m_Velocity.y = -m_Velocity.y;
 	}
 
-	float cDist_sq = powf((distance.x - rectangle.size.x / 2), 2) + powf((distance.y - rectangle.size.y / 2), 2);
-	if (cDist_sq <= powf(radius, 2))
-	{
+	const float distFromCircleToRect = powf((distance.x - rectangle.size.x / 2), 2) + powf((distance.y - rectangle.size.y / 2), 2);
 
-		float u = ((rectangle.size.x / 2 - m_Sprite.getPosition().x) * m_Velocity.x + (rectangle.size.y / 2 - m_Sprite.getPosition().y) * m_Velocity.y) / (ballSpeed * ballSpeed);
+	if (distFromCircleToRect <= powf(radius, 2))
+	{
+		// find the distance that the corner is from the line segment from the balls pos to the next pos
+		const float u = ((rectangle.size.x / 2 - m_Sprite.getPosition().x) * m_Velocity.x + (rectangle.size.y / 2 - m_Sprite.getPosition().y) * m_Velocity.y) / (ballSpeed * ballSpeed);
+
 		// get the closest point on the line to the corner
-		float cpx = m_Sprite.getPosition().x + m_Velocity.x * u;
-		float cpy = m_Sprite.getPosition().y + m_Velocity.y * u;
+		float closestPointX = m_Sprite.getPosition().x + m_Velocity.x * u;
+		float closestPointY = m_Sprite.getPosition().y + m_Velocity.y * u;
 
 		// get the distance from the ball current pos to the intercept point
-		float d = sqrt(powf(cpx - m_Sprite.getPosition().x, 2) + powf(cpy - m_Sprite.getPosition().y, 2));
+		float distanceToInterceptPoint = sqrt(powf(closestPointX - m_Sprite.getPosition().x, 2) + powf(closestPointY - m_Sprite.getPosition().y, 2));
 
 		// intercept point is closest to line start
-		cpx -= m_Velocity.x * d;
-		cpy -= m_Velocity.y * d;
+		closestPointX -= m_Velocity.x * distanceToInterceptPoint;
+		closestPointY -= m_Velocity.y * distanceToInterceptPoint;
 
 		// find the normalised tangent at intercept point 
-		float ty = (cpx - rectangle.size.x / 2) / radius;
-		float tx = -(cpy - rectangle.size.y / 2) / radius;
+		const float tangentY = (closestPointX - rectangle.size.x / 2) / radius;
+		const float tangentX = -(closestPointY - rectangle.size.y / 2) / radius;
 
 		// calculate the reflection vector
-		float bsx = m_Velocity.x / ballSpeed;   // normalise ball speed
-		float bsy = m_Velocity.y / ballSpeed;
-		float dot = (bsx * tx + bsy * ty) * 2;
-
-		// get the distance the ball travels past the intercept
-		d = ballSpeed - d;
+		const float ballSpeedX = m_Velocity.x / ballSpeed;   // normalise ball speed
+		const float ballSpeedY = m_Velocity.y / ballSpeed;
+		const float dotProduct = (ballSpeedX * tangentX + ballSpeedY * tangentY) * 2;
 
 		// the reflected vector is the balls new delta (this delta is normalised)
-		m_Velocity.x = (tx * dot - bsx);
-		m_Velocity.y = (ty * dot - bsy);
+		m_Velocity.x = (tangentX * dotProduct - ballSpeedX);
+		m_Velocity.y = (tangentY * dotProduct - ballSpeedY);
+
+		// get the distance the ball travels past the intercept
+		distanceToInterceptPoint = ballSpeed - distanceToInterceptPoint;
 
 		// move the ball the remaining distance away from corner
-		m_Sprite.setPosition(m_Sprite.getPosition() + m_Velocity * d);
+		m_Sprite.setPosition(m_Sprite.getPosition() + m_Velocity * distanceToInterceptPoint);
 
 		// set the ball delta to the balls speed
 		m_Velocity.x *= ballSpeed;
