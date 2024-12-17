@@ -2,18 +2,19 @@
 #include "IUpdatable.h"
 #include "Game/SoloGame.h"
 #include "Resources.h"
+#include "ResourcesManager.h"
 #include "Utils/Logger.h"
 #include <iostream>
 
 App::App(int argc, char* argv[])
-	: m_Resources(Resources::TexturePaths.size())
 {
 	Logger::Create(std::cout);
 	Logger::Instance() << "Initializing app...\n";
 
+	ResourcesManager::Create(Resources::TexturePaths.size());
 	for (auto path : Resources::TexturePaths)
 	{
-		if (!m_Resources.LoadTexture(path))
+		if (!ResourcesManager::Instance().LoadTexture(path))
 		{
 			Logger::Instance() << "Failed: load texture at path `" << path << "`.\n";
 			return;

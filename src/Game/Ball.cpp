@@ -1,7 +1,9 @@
 #include "Ball.h"
+#include "Core/Resources.h"
+#include "Core/ResourcesManager.h"
 
-Ball::Ball(const sf::Texture& texture, sf::Vector2f position)
-	: m_Sprite(texture)
+Ball::Ball(sf::Vector2f position)
+	: m_Sprite(ResourcesManager::Instance().GetTexture(Resources::BallTexture))
 {
 	m_Sprite.setPosition(position);
 }

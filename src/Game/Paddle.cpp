@@ -1,7 +1,9 @@
 #include "Paddle.h"
+#include "Core/Resources.h"
+#include "Core/ResourcesManager.h"
 
-Paddle::Paddle(const sf::Texture texture, sf::Vector2f position)
-	: m_Sprite(texture)
+Paddle::Paddle(sf::Vector2f position)
+	: m_Sprite(ResourcesManager::Instance().GetTexture(Resources::PaddleTexture))
 {
 	m_Sprite.setPosition(position);
 }

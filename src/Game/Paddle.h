@@ -7,7 +7,7 @@ class Paddle : public sf::Drawable, public IUpdatable
 {
 public:
 
-	Paddle(const sf::Texture texture, sf::Vector2f position);
+	Paddle(sf::Vector2f position);
 
 private:
 

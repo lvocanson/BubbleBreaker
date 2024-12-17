@@ -1,6 +1,5 @@
 #pragma once
 #include "Game.h";
-#include "ResourcesManager.h"
 #include <SFML/Graphics.hpp>
 
 class IUpdatable;
@@ -30,7 +29,6 @@ private:
 private:
 
 	bool m_IsReadyToRun = false;
-	ResourcesManager m_Resources;
 	sf::RenderWindow m_Window;
 	sf::Clock m_FrameClock;
 

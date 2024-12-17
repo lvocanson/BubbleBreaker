@@ -1,8 +1,10 @@
 #include "Brick.h"
+#include "Core/Resources.h"
+#include "Core/ResourcesManager.h"
 #include <SFML/Graphics.hpp>
 
-Brick::Brick(const sf::Texture texture, sf::Vector2f position, unsigned int hp)
-	: m_Sprite(texture)
+Brick::Brick(sf::Vector2f position, unsigned int hp)
+	: m_Sprite(ResourcesManager::Instance().GetTexture(Resources::BrickTexture))
 	, m_Hp(hp)
 {
 	m_Sprite.setPosition(position);
