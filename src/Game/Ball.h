@@ -9,7 +9,7 @@ public:
 
 	void SetVelocity(sf::Vector2f vel) { m_Velocity = vel; }
 
-	void CheckForCollision(sf::FloatRect rectangle);
+	bool CheckForCollision(sf::FloatRect rectangle);
 
 	void Update(float dt);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(m_Sprite, states);	}

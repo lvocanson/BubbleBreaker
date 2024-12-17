@@ -14,19 +14,20 @@ Ball::Ball(sf::Vector2f position)
 	};
 	m_Sprite.setScale(newScale);
 	m_Sprite.setPosition(position);
+	m_Sprite.setOrigin(Resources::BallSize);
 }
 
-void Ball::CheckForCollision(sf::FloatRect rectangle)
+bool Ball::CheckForCollision(sf::FloatRect rectangle)
 {
 	sf::Vector2f distance;
-	distance.x = abs(m_Sprite.getPosition().x - rectangle.position.x);
-	distance.y = abs(m_Sprite.getPosition().y - rectangle.position.y);
+	distance.x = abs(m_Sprite.getGlobalBounds().getCenter().x - rectangle.position.x);
+	distance.y = abs(m_Sprite.getGlobalBounds().getCenter().y - rectangle.position.y);
 
-	const float radius = m_Sprite.getTextureRect().size.x;
+	const float radius = m_Sprite.getGlobalBounds().size.x;
 	const float ballSpeed = sqrt(m_Velocity.x * m_Velocity.x + m_Velocity.y * m_Velocity.y); // get ball speed relative to bat
 
-	if (distance.x > (rectangle.size.x / 2 + radius)) return;
-	if (distance.y > (rectangle.size.y / 2 + radius)) return;
+	if (distance.x > (rectangle.size.x / 2 + radius)) return false;
+	if (distance.y > (rectangle.size.y / 2 + radius)) return false;
 
 	// bat now only has a bottom, right sides and bottom right corner
 	const float distY = ((rectangle.size.y / 2 + radius) - m_Sprite.getPosition().y); // distance from bottom 
@@ -38,25 +39,25 @@ void Ball::CheckForCollision(sf::FloatRect rectangle)
 	// get y location of intercept for right of bat
 	const float rightY = m_Sprite.getPosition().y + (m_Velocity.y / m_Velocity.x) * distX;
 
-	const float distRight = powf((distance.x - rectangle.size.x / 2), 2) + powf((distance.y - rectangle.size.y / 2), 2);
-	const float distBottom = powf((distance.x - rectangle.size.x / 2), 2) + powf((distance.y - rectangle.size.y / 2), 2);
+	const float distBottom = powf((bottomX - m_Sprite.getPosition().x), 2) + powf((rectangle.size.x / 2 + radius - m_Sprite.getPosition().y), 2);
+	const float distRight = powf((rectangle.size.x / 2 + radius - m_Sprite.getPosition().x), 2) + powf((rightY - m_Sprite.getPosition().y), 2);
 
 	if (distance.x <= (rectangle.size.x / 2))
 	{
 		//vertical collision
-		sf::Vector2f vect(rectangle.size.x / 2 + radius - m_Velocity.x * ((ballSpeed - distRight) / ballSpeed), 0);
+		sf::Vector2f vect(rectangle.size.x / 2 + radius + m_Velocity.x * ((ballSpeed - distRight) / ballSpeed), 0);
 		m_Sprite.setPosition(m_Sprite.getPosition() + vect);
-		m_Velocity.x = -m_Velocity.x;
-		return;
+		m_Velocity.x *= -1;
+		return true;
 	}
 
 	if (distance.y <= (rectangle.size.y / 2))
 	{
 		//horizontal collision
-		sf::Vector2f vect(0, rectangle.size.y / 2 + radius - m_Velocity.y * ((ballSpeed - distBottom) / ballSpeed));
+		sf::Vector2f vect(0, rectangle.size.y / 2 + radius + m_Velocity.y * ((ballSpeed - distBottom) / ballSpeed));
 		m_Sprite.setPosition(m_Sprite.getPosition() + vect);
-		m_Velocity.y = -m_Velocity.y;
-		return;
+		m_Velocity.y *= -1;
+		return true;
 	}
 
 	const float distFromCircleToRect = powf((distance.x - rectangle.size.x / 2), 2) + powf((distance.y - rectangle.size.y / 2), 2);
@@ -94,12 +95,15 @@ void Ball::CheckForCollision(sf::FloatRect rectangle)
 		distanceToInterceptPoint = ballSpeed - distanceToInterceptPoint;
 
 		// move the ball the remaining distance away from corner
-		m_Sprite.setPosition(m_Sprite.getPosition() + m_Velocity * distanceToInterceptPoint);
+		//m_Sprite.setPosition(m_Sprite.getPosition() + m_Velocity * distanceToInterceptPoint);
 
 		// set the ball delta to the balls speed
 		m_Velocity.x *= ballSpeed;
 		m_Velocity.y *= ballSpeed;
+
+		return true;
 	}
+	return false;
 }
 
 void Ball::Update(float dt)
