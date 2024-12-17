@@ -8,6 +8,7 @@ Brick::Brick(sf::Vector2f position, unsigned int hp)
 	, m_Hp(hp)
 {
 	m_Sprite.setPosition(position);
+	m_Sprite.setColor(Resources::BrickColors[m_Hp]);
 }
 
 void Brick::LooseHp(int qty)
@@ -19,7 +20,7 @@ void Brick::LooseHp(int qty)
 	}
 	else
 	{
-		//set Tint accordingly with hp
+		m_Sprite.setColor(Resources::BrickColors[m_Hp]);
 	}
 }
 
