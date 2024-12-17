@@ -79,6 +79,6 @@ void App::Update()
 void App::Draw()
 {
 	m_Window.clear();
-	m_Window.draw(*m_Game.get());
+	m_Game->DrawOn(m_Window);
 	m_Window.display();
 }
