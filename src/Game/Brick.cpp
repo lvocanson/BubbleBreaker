@@ -17,7 +17,6 @@ Brick::Brick(sf::Vector2f position, int hp)
 	m_Sprite.setScale(newScale);
 	m_Sprite.setPosition(position);
 	m_Sprite.setColor(Resources::BrickColors[m_Hp]);
-	m_Sprite.setOrigin(Resources::BrickSize);
 }
 
 void Brick::LooseHp(int qty)

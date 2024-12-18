@@ -21,12 +21,12 @@ App::App(int argc, char* argv[])
 	}
 
 	m_Window.create(sf::VideoMode({1600u, 900u}), "BubbleBreaker");
-	m_Window.setFramerateLimit(144u);
 	if (!m_Window.isOpen())
 	{
 		Logger::Instance() << "Failed: window creation.\n";
 		return;
 	}
+	m_Window.setFramerateLimit(144u);
 
 	m_Game = std::make_unique<SoloGame>();
 	if (!m_Game.get())
@@ -34,6 +34,7 @@ App::App(int argc, char* argv[])
 		Logger::Instance() << "Failed: game creation.\n";
 		return;
 	}
+	m_Game->SetGameLimits({{0.f, 0.f}, {300.f, 300.f}});
 
 	m_IsReadyToRun = true;
 }

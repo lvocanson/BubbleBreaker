@@ -12,10 +12,12 @@ Game::State Game::Update(float dt)
 	for (auto& ball : m_Balls)
 	{
 		ball.Update(dt);
+		KeepInGameLimits(ball);
 	}
 	for (auto& paddle : m_Paddles)
 	{
 		paddle.Update(dt);
+		KeepInGameLimits(paddle);
 	}
 
 	return State::Ongoing;
