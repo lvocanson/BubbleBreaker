@@ -9,7 +9,7 @@ SoloGame::SoloGame()
 			{{50.f, 50.f}},
 		},
 		{ // Bricks
-			{{60.f, 100.f}, 0},
+			{{100.f, 100.f}, 0},
 		},
 		{ // Paddles
 			{{100.f, 800.f}, sf::Keyboard::Key::Left, sf::Keyboard::Key::Right},
@@ -23,11 +23,12 @@ SoloGame::SoloGame()
 	const float angle = angleDist(gen);
 	const sf::Vector2f randomUpUnitVec
 	{
-		std::cos(angle),
-		std::sin(angle)
+		25.f,25.f
+		/*std::cos(angle),
+		std::sin(angle)*/
 	};
 
-	m_Balls[0].SetVelocity(randomUpUnitVec * Resources::MinBallSpeed);
+	m_Balls[0].SetVelocity(randomUpUnitVec /** Resources::MinBallSpeed*/);
 }
 
 Game::State SoloGame::Update(float dt)

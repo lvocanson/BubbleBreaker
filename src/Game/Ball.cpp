@@ -41,19 +41,48 @@ bool Ball::CheckForCollision(sf::FloatRect rectangle)
 	if (distance.x > (rectangle.size.x / 2 + radius)) return false;
 	if (distance.y > (rectangle.size.y / 2 + radius)) return false;
 
+	float cornerDistance_sq = (distance.x - rectangle.size.x / 2) * (distance.x - rectangle.size.x / 2) +
+		(distance.y - rectangle.size.y / 2) * (distance.y - rectangle.size.y / 2);
+
+	if (cornerDistance_sq <= radius * radius)
+	{
+		m_Velocity *= -1.f;
+		if (m_Velocity.lengthSquared() < Resources::MaxBallSpeed * Resources::MaxBallSpeed)
+			m_Velocity *= Resources::BounceSpeedFactor;
+		return true;
+	}
+
 	if (distance.x <= (rectangle.size.x / 2) + radius && distance.x >= (rectangle.size.x / 2) - radius)
 	{
 		m_Velocity.x *= -1;
-		m_Velocity *= Resources::BounceSpeedFactor;
+		int sign = m_Velocity.x > 0 ? 1 : -1;
+		sf::Vector2f offset
+		{
+			abs(rectangle.size.x / 2 - distance.x) * sign,
+			0.f
+		};
+		//m_Sprite.move(offset);
+		if (m_Velocity.lengthSquared() < Resources::MaxBallSpeed * Resources::MaxBallSpeed)
+			m_Velocity *= Resources::BounceSpeedFactor;
 		return true;
 	}
 
 	if (distance.y <= (rectangle.size.y / 2) + radius && distance.y >= (rectangle.size.y / 2) - radius)
 	{
+		int sign = m_Velocity.y > 0 ? -1 : 1;
 		m_Velocity.y *= -1;
-		m_Velocity *= Resources::BounceSpeedFactor;
+		sf::Vector2f offset
+		{
+			0.f,
+			abs(rectangle.size.y / 2 - distance.y) * sign,
+		};
+		//m_Sprite.move(offset);
+		if (m_Velocity.lengthSquared() < Resources::MaxBallSpeed * Resources::MaxBallSpeed)
+			m_Velocity *= Resources::BounceSpeedFactor;
 		return true;
 	}
+
+
 	return false;
 }
 
