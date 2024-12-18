@@ -38,3 +38,17 @@ void Game::DrawOn(sf::RenderTarget& target)
 		paddle.draw(target, sf::RenderStates::Default);
 	}
 }
+
+void Game::CollisionResolution(Paddle currentPaddle)
+{
+	for (Ball& ball : m_Balls)
+	{
+		for (Brick& brick : m_Bricks)
+		{
+			if (ball.CheckForCollision(brick.GetRect()))
+				brick.LooseHp(1);
+		}
+		if (ball.CheckForCollision(currentPaddle.GetRect()))
+			return;
+	}
+}

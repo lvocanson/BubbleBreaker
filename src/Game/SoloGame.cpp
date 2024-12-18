@@ -9,7 +9,7 @@ SoloGame::SoloGame()
 			{{50.f, 50.f}},
 		},
 		{ // Bricks
-			{{100.f, 100.f}, 0},
+			{{60.f, 100.f}, 0},
 		},
 		{ // Paddles
 			{{100.f, 800.f}, sf::Keyboard::Key::Left, sf::Keyboard::Key::Right},
@@ -35,6 +35,9 @@ Game::State SoloGame::Update(float dt)
 	// Update balls & paddle
 	Game::Update(dt);
 
+	//Check and resolve collisions
+	Game::CollisionResolution(m_Paddles[0]);
+
 	// TODO: end conditions
 	return State::Ongoing;
 }
@@ -42,4 +45,3 @@ Game::State SoloGame::Update(float dt)
 SoloGame::~SoloGame()
 {
 }
-

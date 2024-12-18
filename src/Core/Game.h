@@ -95,6 +95,7 @@ protected:
 		obj.SetPosition(position);
 	}
 
+	void CollisionResolution(Paddle currentPaddle);
 
 protected:
 

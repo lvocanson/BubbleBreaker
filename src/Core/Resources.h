@@ -8,6 +8,7 @@ static constexpr auto BallTexture = "res/ball.png";
 static constexpr auto BallSize = sf::Vector2f{10.f, 10.f};
 static constexpr auto MinBallSpeed = 100.f;
 static constexpr auto MaxBallSpeed = 100.f;
+static constexpr auto BounceSpeedFactor = 1.1f;
 
 static constexpr auto BrickTexture = "res/brick.png";
 static constexpr auto BrickSize = sf::Vector2f{100.f, 50.f};
