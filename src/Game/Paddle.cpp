@@ -4,17 +4,10 @@
 #include <SFML/Graphics.hpp>
 
 Paddle::Paddle(sf::Vector2f position, sf::Keyboard::Key leftKey, sf::Keyboard::Key rightKey)
-	: m_Sprite(ResourcesManager::Instance().GetTexture(Resources::PaddleTexture)), m_LeftKey(leftKey), m_RigthKey(rightKey)
+	: Entity(ResourcesManager::Instance().GetTexture(Resources::PaddleTexture), {position, Resources::PaddleSize})
+	, m_LeftKey(leftKey)
+	, m_RigthKey(rightKey)
 {
-	const auto currentSize = m_Sprite.getLocalBounds().size;
-	const auto currentScale = m_Sprite.getScale();
-	const sf::Vector2f newScale
-	{
-		(Resources::PaddleSize.x / currentSize.x) * currentScale.x,
-		(Resources::PaddleSize.y / currentSize.y) * currentScale.y
-	};
-	m_Sprite.setScale(newScale);
-	m_Sprite.setPosition(position);
 }
 
 void Paddle::Update(float dt)

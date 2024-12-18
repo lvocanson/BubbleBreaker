@@ -3,6 +3,7 @@
 #include "Game/Brick.h"
 #include "Game/Paddle.h"
 #include <SFML/Graphics/Drawable.hpp>
+#include <algorithm>
 #include <vector>
 
 template <typename T>
@@ -34,7 +35,7 @@ public:
 	virtual ~Game() = default;
 
 	void SetGameLimits(const sf::FloatRect& limits) { m_GameLimits = limits; }
-	void DrawOn(sf::RenderTarget& target);
+	void DrawOn(sf::RenderTarget& target, const sf::RenderStates& states);
 
 protected:
 

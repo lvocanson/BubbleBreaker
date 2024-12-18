@@ -80,6 +80,6 @@ void App::Update()
 void App::Draw()
 {
 	m_Window.clear();
-	m_Game->DrawOn(m_Window);
+	m_Game->DrawOn(m_Window, sf::RenderStates::Default);
 	m_Window.display();
 }
