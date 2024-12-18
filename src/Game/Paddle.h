@@ -10,6 +10,8 @@ public:
 
 	void Update(float dt);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const { target.draw(m_Sprite, states); }
+	
+	sf::FloatRect GetRect() { return m_Sprite.getGlobalBounds(); }
 
 private:
 
