@@ -23,19 +23,19 @@ Game::State Game::Update(float dt)
 	return State::Ongoing;
 }
 
-void Game::DrawOn(sf::RenderTarget& target)
+void Game::DrawOn(sf::RenderTarget& target, const sf::RenderStates& states)
 {
 	for (auto& ball : m_Balls)
 	{
-		ball.draw(target, sf::RenderStates::Default);
+		ball.Draw(target, states);
 	}
 	for (auto& brick : m_Bricks)
 	{
-		brick.draw(target, sf::RenderStates::Default);
+		brick.Draw(target, states);
 	}
 	for (auto& paddle : m_Paddles)
 	{
-		paddle.draw(target, sf::RenderStates::Default);
+		paddle.Draw(target, states);
 	}
 }
 
