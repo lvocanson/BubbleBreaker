@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 Brick::Brick(sf::Vector2f position, int hp)
-	: Entity(ResourcesManager::Instance().GetTexture(Resources::BrickTexture), { position, Resources::BrickSize })
+	: Entity(ResourcesManager::Instance().GetTexture(Resources::BrickTexture), {position, Resources::BrickSize})
 	, m_Hp(hp)
 {
 	m_Sprite.setColor(Resources::BrickColors[m_Hp]);
@@ -12,10 +12,18 @@ Brick::Brick(sf::Vector2f position, int hp)
 
 void Brick::LooseHp(int qty)
 {
-	if (m_Hp < 0) return;
+	if (m_Hp <= 0)
+	{
+		return;
+	}
+
 	m_Hp -= qty;
-	m_Sprite.setColor(Resources::BrickColors[m_Hp]);
-	if (m_Hp < 0) m_Hp = 0;
+	if (m_Hp < 0)
+	{
+		m_Hp = 0;
+	}
+	else
+	{
+		m_Sprite.setColor(Resources::BrickColors[m_Hp]);
+	}
 }
-
-
