@@ -25,18 +25,9 @@ Game::State Game::Update(float dt)
 
 void Game::DrawOn(sf::RenderTarget& target, const sf::RenderStates& states)
 {
-	for (auto& ball : m_Balls)
+	for (Entity& e : *this)
 	{
-		ball.Draw(target, states);
-	}
-	for (auto& brick : m_Bricks)
-	{
-		if (brick.GetHp() != 0)
-			brick.Draw(target, states);
-	}
-	for (auto& paddle : m_Paddles)
-	{
-		paddle.Draw(target, states);
+		e.Draw(target, states);
 	}
 }
 
@@ -46,8 +37,6 @@ void Game::CollisionResolution(const Paddle& currentPaddle)
 	{
 		for (Brick& brick : m_Bricks)
 		{
-			if (brick.GetHp() == 0)
-				continue;
 			if (ball.ReactToCollision(brick.GetRect()))
 				brick.LooseHp(1);
 		}
@@ -57,7 +46,7 @@ void Game::CollisionResolution(const Paddle& currentPaddle)
 			const auto velocity = ball.GetVelocity();
 			const auto currentAngle = velocity.angle();
 			const auto bounceAngle = currentPaddle.CalculateBounceAngle(ball.GetRect(), currentAngle);
-			ball.SetVelocity({velocity.length(), bounceAngle});
+			ball.SetVelocity({ velocity.length(), bounceAngle });
 		}
 	}
 }
