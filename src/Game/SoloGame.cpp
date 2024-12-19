@@ -66,6 +66,7 @@ Game::State SoloGame::Update(float dt)
 	if (m_Bricks.size() == 0)
 	{
 		//Game Won
+		return State::Ended;
 	}
 
 	// Update balls & paddle

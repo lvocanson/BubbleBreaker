@@ -1,9 +1,11 @@
 #include "Game.h"
+#include "Core/ResourcesManager.h"
 
 Game::Game(std::vector<Ball>&& balls, std::vector<Brick>&& bricks, std::vector<Paddle>&& paddles)
 	: m_Balls(std::move(balls))
 	, m_Bricks(std::move(bricks))
 	, m_Paddles(std::move(paddles))
+	, m_Background(ResourcesManager::Instance().GetTexture(Resources::BackgroundTexture), sf::FloatRect(sf::Vector2f(0, 0), (sf::Vector2f)Resources::WindowSize))
 {
 }
 
@@ -25,6 +27,7 @@ Game::State Game::Update(float dt)
 
 void Game::DrawOn(sf::RenderTarget& target, const sf::RenderStates& states)
 {
+	m_Background.Draw(target, states);
 	for (Entity& e : *this)
 	{
 		e.Draw(target, states);

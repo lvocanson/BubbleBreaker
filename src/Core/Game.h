@@ -82,6 +82,7 @@ protected:
 	std::vector<Ball> m_Balls;
 	std::vector<Brick> m_Bricks;
 	std::vector<Paddle> m_Paddles;
+	Entity m_Background;
 };
 
 #include "Game.inl"
