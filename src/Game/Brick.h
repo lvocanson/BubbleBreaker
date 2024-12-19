@@ -8,6 +8,7 @@ public:
 	Brick(sf::Vector2f position, int hp);
 
 	void LooseHp(int qty);
+	int GetHp() { return m_Hp; }
 
 private:
 
