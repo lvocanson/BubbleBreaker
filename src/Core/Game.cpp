@@ -31,7 +31,7 @@ void Game::DrawOn(sf::RenderTarget& target, const sf::RenderStates& states)
 	}
 	for (auto& brick : m_Bricks)
 	{
-		if (brick.GetHp() > 0 || brick.GetHp() == -1)
+		if (brick.GetHp() != 0)
 			brick.Draw(target, states);
 	}
 	for (auto& paddle : m_Paddles)
@@ -46,7 +46,7 @@ void Game::CollisionResolution(const Paddle& currentPaddle)
 	{
 		for (Brick& brick : m_Bricks)
 		{
-			if (brick.GetHp() <= 0 && brick.GetHp() != -1)
+			if (brick.GetHp() == 0)
 				continue;
 			if (ball.ReactToCollision(brick.GetRect()))
 				brick.LooseHp(1);
