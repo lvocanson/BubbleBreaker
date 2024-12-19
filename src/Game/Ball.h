@@ -7,7 +7,5 @@ public:
 
 	Ball(sf::Vector2f position);
 
-	bool CheckForCollision(sf::FloatRect rectangle);
-
-	void Update(float dt);
+	bool ReactToCollision(sf::FloatRect rectangle);
 };

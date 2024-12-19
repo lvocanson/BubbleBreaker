@@ -8,7 +8,7 @@ public:
 
 	Paddle(sf::Vector2f position, sf::Keyboard::Key leftKey, sf::Keyboard::Key rightKey);
 
-	void Update(float dt);
+	void ReactToInput(float dt);
 
 private:
 

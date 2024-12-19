@@ -10,14 +10,14 @@ Paddle::Paddle(sf::Vector2f position, sf::Keyboard::Key leftKey, sf::Keyboard::K
 {
 }
 
-void Paddle::Update(float dt)
+void Paddle::ReactToInput(float dt)
 {
 	if (sf::Keyboard::isKeyPressed(m_LeftKey))
 	{
-		m_Sprite.move({ -Resources::PaddleSpeed * dt, 0.f });
+		m_Sprite.move({-Resources::PaddleSpeed * dt, 0.f});
 	}
 	else if (sf::Keyboard::isKeyPressed(m_RigthKey))
 	{
-		m_Sprite.move({ Resources::PaddleSpeed * dt, 0.f });
+		m_Sprite.move({Resources::PaddleSpeed * dt, 0.f});
 	}
 }

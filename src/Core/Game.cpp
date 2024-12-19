@@ -11,12 +11,12 @@ Game::State Game::Update(float dt)
 {
 	for (auto& ball : m_Balls)
 	{
-		ball.Update(dt);
+		ball.ApplyVelocity(dt);
 		KeepInGameLimits(ball);
 	}
 	for (auto& paddle : m_Paddles)
 	{
-		paddle.Update(dt);
+		paddle.ReactToInput(dt);
 		KeepInGameLimits(paddle);
 	}
 
@@ -39,16 +39,18 @@ void Game::DrawOn(sf::RenderTarget& target, const sf::RenderStates& states)
 	}
 }
 
-void Game::CollisionResolution(Paddle currentPaddle)
+void Game::CollisionResolution(const Paddle& currentPaddle)
 {
 	for (Ball& ball : m_Balls)
 	{
 		for (Brick& brick : m_Bricks)
 		{
-			if (ball.CheckForCollision(brick.GetRect()))
+			if (ball.ReactToCollision(brick.GetRect()))
 				brick.LooseHp(1);
 		}
-		if (ball.CheckForCollision(currentPaddle.GetRect()))
-			return;
+
+		if (ball.ReactToCollision(currentPaddle.GetRect()))
+		{
+		}
 	}
 }

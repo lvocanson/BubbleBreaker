@@ -9,7 +9,7 @@ public:
 
 	Entity(const sf::Texture& tex, const sf::FloatRect& rect);
 
-	sf::FloatRect GetRect() { return m_Sprite.getGlobalBounds(); }
+	sf::FloatRect GetRect() const { return m_Sprite.getGlobalBounds(); }
 	void SetPosition(sf::Vector2f position) { m_Sprite.setPosition(position); }
 
 	void Draw(sf::RenderTarget& target, const sf::RenderStates& states) const { target.draw(m_Sprite, states); }

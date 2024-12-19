@@ -7,7 +7,7 @@ Ball::Ball(sf::Vector2f position)
 {
 }
 
-bool Ball::CheckForCollision(sf::FloatRect rectangle)
+bool Ball::ReactToCollision(sf::FloatRect rectangle)
 {
 	sf::Vector2f rectOrigin
 	{
@@ -74,9 +74,4 @@ bool Ball::CheckForCollision(sf::FloatRect rectangle)
 
 
 	return false;
-}
-
-void Ball::Update(float dt)
-{
-	ApplyVelocity(dt);
 }
