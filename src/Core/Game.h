@@ -4,6 +4,7 @@
 #include "Game/Paddle.h"
 #include <SFML/Graphics/Drawable.hpp>
 #include <algorithm>
+#include <variant>
 #include <vector>
 
 template <typename T>
@@ -43,6 +44,38 @@ protected:
 	void CollisionResolution(const Paddle& currentPaddle);
 
 	bool IsOutsideOfLimits(const Ball& ball, float dt) const;
+
+
+protected:
+
+	class GameIterator
+	{
+	public:
+		using BallIt = typename std::vector<Ball>::iterator;
+		using BrickIt = typename std::vector<Brick>::iterator;
+		using PaddleIt = typename std::vector<Paddle>::iterator;
+		using VariantType = std::variant<BallIt, BrickIt, PaddleIt>;
+
+		GameIterator(VariantType it, Game* owner = nullptr)
+			: m_Current(std::move(it))
+			, m_Owner(owner)
+		{
+		}
+
+		GameIterator& operator++();
+		Entity& operator*();
+
+		bool operator==(const GameIterator& other) const { return m_Current == other.m_Current; }
+		bool operator!=(const GameIterator& other) const { return !(*this == other); }
+
+	private:
+
+		VariantType m_Current;
+		Game* m_Owner;
+	};
+
+	GameIterator begin() { return {m_Balls.begin(), this}; }
+	GameIterator end() { return {m_Paddles.end()}; }
 
 protected:
 
