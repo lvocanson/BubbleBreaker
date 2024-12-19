@@ -11,6 +11,7 @@ public:
 
 	sf::FloatRect GetRect() const { return m_Sprite.getGlobalBounds(); }
 	void SetPosition(sf::Vector2f position) { m_Sprite.setPosition(position); }
+	void SetSize(sf::Vector2f size);
 
 	void Draw(sf::RenderTarget& target, const sf::RenderStates& states) const { target.draw(m_Sprite, states); }
 

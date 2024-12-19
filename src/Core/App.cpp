@@ -20,7 +20,7 @@ App::App(int argc, char* argv[])
 		}
 	}
 
-	m_Window.create(sf::VideoMode({ 1600u, 900u }), "BubbleBreaker");
+	m_Window.create(sf::VideoMode(Resources::WindowSize), "BubbleBreaker");
 	if (!m_Window.isOpen())
 	{
 		Logger::Instance() << "Failed: window creation.\n";
@@ -34,7 +34,6 @@ App::App(int argc, char* argv[])
 		Logger::Instance() << "Failed: game creation.\n";
 		return;
 	}
-	m_Game->SetGameLimits({ {0.f, 0.f}, {300.f, 300.f} });
 
 	m_IsReadyToRun = true;
 }
@@ -58,7 +57,6 @@ int App::Run()
 	return EXIT_SUCCESS;
 }
 
-
 void App::PollEvents()
 {
 	while (const std::optional event = m_Window.pollEvent())
@@ -67,6 +65,24 @@ void App::PollEvents()
 		{
 			Logger::Instance() << "Close event received. Closing window...\n";
 			m_Window.close();
+		}
+		if (auto resizedEvent = event->getIf<sf::Event::Resized>())
+		{
+			sf::Vector2u size = resizedEvent->size;
+			constexpr float heightRatio = static_cast<float>(Resources::WindowSize.y) / static_cast<float>(Resources::WindowSize.x);
+			constexpr float widthRatio = static_cast<float>(Resources::WindowSize.x) / static_cast<float>(Resources::WindowSize.y);
+
+			if (size.y * widthRatio <= size.x)
+			{
+				size.x = size.y * widthRatio;
+			}
+			else if (size.x * heightRatio <= size.y)
+			{
+				size.y = size.x * heightRatio;
+			}
+
+			m_Window.setSize(size);
+			Logger::Instance() << "Resized event received. Resizing game to {" << size.x << ", " << size.y << "}.\n";
 		}
 	}
 }

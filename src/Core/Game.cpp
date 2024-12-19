@@ -57,16 +57,16 @@ void Game::CollisionResolution(const Paddle& currentPaddle)
 			const auto velocity = ball.GetVelocity();
 			const auto currentAngle = velocity.angle();
 			const auto bounceAngle = currentPaddle.CalculateBounceAngle(ball.GetRect(), currentAngle);
-			ball.SetVelocity({ velocity.length(), bounceAngle });
+			ball.SetVelocity({velocity.length(), bounceAngle});
 		}
 	}
 }
 
-bool Game::IsOutsideOfLimits(const Ball& ball, float dt)
+bool Game::IsOutsideOfLimits(const Ball& ball, float dt) const
 {
 	sf::FloatRect rect = ball.GetRect();
 
-	const float maxY = m_GameLimits.position.y + m_GameLimits.size.y - rect.size.y;
+	const float maxY = static_cast<float>(Resources::WindowSize.y) - rect.size.y;
 	if (rect.position.y + ball.GetVelocity().y * dt >= maxY)
 	{
 		return true;

@@ -4,6 +4,8 @@
 
 namespace Resources
 {
+static constexpr auto WindowSize = sf::Vector2u{1600u, 900u};
+
 static constexpr auto BallTexture = "res/ball.png";
 static constexpr auto BallSize = sf::Vector2f{10.f, 10.f};
 static constexpr auto MinBallSpeed = 100.f;

@@ -13,13 +13,6 @@ concept HasGetRectAndSetPosition = requires(T obj, sf::Vector2f vec2f)
 	{ obj.SetPosition(vec2f) } -> std::same_as<void>;
 };
 
-template <typename T>
-concept HasVelocity = requires(T obj, sf::Vector2f velocity)
-{
-	{ obj.GetVelocity() } -> std::same_as<sf::Vector2f>;
-	{ obj.SetVelocity(velocity) } -> std::same_as<void>;
-};
-
 class Game
 {
 public:
@@ -30,80 +23,32 @@ public:
 		Ended
 	};
 
+	/**
+	* @brief New game
+	* 
+	* @param limits The limits of the game, should be the window size
+	* @param size The original size of the game, the game will be scaled to fit in the limits (keeping ratio)
+	*/
 	Game(std::vector<Ball>&& balls, std::vector<Brick>&& bricks, std::vector<Paddle>&& paddles);
 	virtual State Update(float dt);
 	virtual ~Game() = default;
 
-	void SetGameLimits(const sf::FloatRect& limits) { m_GameLimits = limits; }
 	void DrawOn(sf::RenderTarget& target, const sf::RenderStates& states);
 
 protected:
 
 	template <HasGetRectAndSetPosition T>
-	void KeepInGameLimits(T& obj)
-	{
-		const sf::FloatRect objRect = obj.GetRect();
-		const sf::FloatRect intersection = m_GameLimits.findIntersection(objRect).value_or(sf::FloatRect());
-		if (intersection == objRect)
-		{
-			// Still in limits
-			return;
-		}
-
-		sf::Vector2f position = objRect.position;
-		const float minX = m_GameLimits.position.x;
-		const float maxX = m_GameLimits.position.x + m_GameLimits.size.x - objRect.size.x;
-		const float minY = m_GameLimits.position.y;
-		const float maxY = m_GameLimits.position.y + m_GameLimits.size.y - objRect.size.y;
-
-		// Bounce if has velocity
-		if constexpr (HasVelocity<T>)
-		{
-			sf::Vector2f velocity = obj.GetVelocity();
-
-			if (position.x < minX)
-			{
-				position.x = 2 * minX - position.x;
-				velocity.x = -velocity.x;
-			}
-			else if (position.x > maxX)
-			{
-				position.x = 2 * maxX - position.x;
-				velocity.x = -velocity.x;
-			}
-
-			if (position.y < minY)
-			{
-				position.y = 2 * minY - position.y;
-				velocity.y = -velocity.y;
-			}
-			else if (position.y > maxY)
-			{
-				position.y = 2 * maxY - position.y;
-				velocity.y = -velocity.y;
-			}
-
-			obj.SetVelocity(velocity);
-		}
-
-		// otherwise simple clamp
-		else position =
-		{
-			std::clamp(position.x, minX, maxX),
-			std::clamp(position.y, minY, maxY)
-		};
-
-		obj.SetPosition(position);
-	}
+	void KeepInGameLimits(T& obj);
 
 	void CollisionResolution(const Paddle& currentPaddle);
 
-	bool IsOutsideOfLimits(const Ball& ball, float dt);
+	bool IsOutsideOfLimits(const Ball& ball, float dt) const;
 
 protected:
 
 	std::vector<Ball> m_Balls;
 	std::vector<Brick> m_Bricks;
 	std::vector<Paddle> m_Paddles;
-	sf::FloatRect m_GameLimits;
 };
+
+#include "Game.inl"

@@ -9,7 +9,7 @@ SoloGame::SoloGame(int hp)
 			{{50.f, 50.f}},
 		},
 		{ // Bricks
-			{{100,100},3},
+			{{100,100}, 3},
 		},
 		{ // Paddles
 			{{100.f, 800.f}, sf::Keyboard::Key::Left, sf::Keyboard::Key::Right},
@@ -18,11 +18,10 @@ SoloGame::SoloGame(int hp)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	static constexpr float PI = 3.14159265358979323846f;
-	std::uniform_real_distribution<float> angleDist(PI, PI * 2);
+	std::uniform_real_distribution<float> angleDist(sf::priv::pi, sf::priv::pi * 2.f);
 
 	const sf::Angle angle = sf::radians(angleDist(gen));
-	m_Balls[0].SetVelocity({ Resources::MinBallSpeed, angle });
+	m_Balls[0].SetVelocity({Resources::MinBallSpeed, angle});
 }
 
 Game::State SoloGame::Update(float dt)
