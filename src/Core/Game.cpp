@@ -88,7 +88,12 @@ Game::GameIterator& Game::GameIterator::operator++()
 			if constexpr (std::equality_comparable_with<ItType, BallIt>)
 			{
 				if (it == m_Owner->m_Balls.end())
-					m_Current = m_Owner->m_Bricks.begin();
+				{
+					if (m_Owner->m_Bricks.empty())
+						m_Current = m_Owner->m_Paddles.begin();
+					else
+						m_Current = m_Owner->m_Bricks.begin();
+				}
 			}
 			if constexpr (std::equality_comparable_with<ItType, BrickIt>)
 			{
