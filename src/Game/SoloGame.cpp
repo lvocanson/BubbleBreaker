@@ -26,19 +26,20 @@ SoloGame::SoloGame(int hp)
 
 Game::State SoloGame::Update(float dt)
 {
+	bool isBallOut = false;
 	for (Ball& ball : m_Balls)
 	{
 		if (IsOutsideOfLimits(ball, dt))
 		{
 			--m_PlayerHp;
-			m_IsBallOut = true;
+			isBallOut = true;
 		}
 	}
 
-	if (m_IsBallOut)
+	if (isBallOut)
 	{
 		if (m_PlayerHp == 0) return State::Ended;
-		m_IsBallOut = false;
+		isBallOut = false;
 		m_Balls.clear();
 		m_Balls.emplace_back(Ball(Resources::BallSpawnPoint));
 		std::random_device rd;

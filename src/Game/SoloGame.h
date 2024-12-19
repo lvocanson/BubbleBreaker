@@ -10,6 +10,6 @@ public:
 	~SoloGame();
 
 private:
+
 	int m_PlayerHp;
-	bool m_IsBallOut = false;
 };
