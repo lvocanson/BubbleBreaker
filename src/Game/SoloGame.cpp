@@ -3,18 +3,32 @@
 #include "Utils/Logger.h"
 #include <random>
 
+static constexpr std::vector<Brick> MakeWallOfBricks(size_t height)
+{
+	std::vector<Brick> bricks;
+	const float spaceAround = 50.f;
+	const size_t numBricksInWidth = (Resources::WindowSize.x - 2 * spaceAround) / Resources::BrickSize.x;
+	float startY = spaceAround;
+	float startX = (Resources::WindowSize.x - numBricksInWidth * Resources::BrickSize.x) / 2.f;
+
+	for (size_t y = 0; y < height; ++y)
+	{
+		for (size_t x = 0; x < numBricksInWidth; ++x)
+		{
+			sf::Vector2f position{startX + x * Resources::BrickSize.x, startY + y * Resources::BrickSize.y};
+			bricks.emplace_back(position, 3);
+		}
+	}
+
+	return bricks;
+}
+
 SoloGame::SoloGame()
 	: Game(
 		{ // Balls
 			{{50.f, 50.f}},
 		},
-		{ // Bricks
-			{{100,100}, 3},
-			{{200,100}, 3},
-			{{300,100}, 3},
-			{{400,100}, 3},
-			{{250,300}, 3},
-		},
+		MakeWallOfBricks(14),
 		{ // Paddles
 			{{100.f, 800.f}, sf::Keyboard::Key::Left, sf::Keyboard::Key::Right},
 		})
@@ -55,13 +69,13 @@ Game::State SoloGame::Update(float dt)
 		m_Balls[0].SetVelocity({ Resources::MinBallSpeed, angle });
 	}
 
-	for (int i = m_Bricks.size() - 1; i > -1; i--)
-	{
-		if (m_Bricks[i].GetHp() == 0)
-		{
-			m_Bricks.erase(m_Bricks.begin() + i);
-		}
-	}
+	m_Bricks.erase(
+		std::remove_if(m_Bricks.begin(), m_Bricks.end(), [](const auto& brick)
+			{
+				return brick.GetHp() == 0;
+			}),
+		m_Bricks.end()
+	);
 
 	if (m_Bricks.size() == 0)
 	{

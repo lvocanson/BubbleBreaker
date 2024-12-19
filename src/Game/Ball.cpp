@@ -4,11 +4,11 @@
 #include "Utils/Logger.h"
 
 Ball::Ball(sf::Vector2f position)
-	: EntityWithVelocity(ResourcesManager::Instance().GetTexture(Resources::BallTexture), { position, Resources::BallSize })
+	: EntityWithVelocity(ResourcesManager::Instance().GetTexture(Resources::BallTexture), {position, Resources::BallSize})
 {
 }
 
-bool Ball::ReactToCollision(sf::FloatRect rectangle)
+bool Ball::ReactToCollision(const sf::FloatRect& rectangle)
 {
 	sf::Vector2f rectOrigin
 	{

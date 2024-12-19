@@ -29,23 +29,23 @@ void Game::KeepInGameLimits(T& obj)
 	{
 		sf::Vector2f velocity = obj.GetVelocity();
 
-		if (position.x < 0.f)
+		if (position.x <= 0.f)
 		{
 			position.x = -position.x;
 			velocity.x = -velocity.x;
 		}
-		else if (position.x > maxX)
+		else if (position.x >= maxX)
 		{
 			position.x = 2.f * maxX - position.x;
 			velocity.x = -velocity.x;
 		}
 
-		if (position.y < 0.f)
+		if (position.y <= 0.f)
 		{
 			position.y = -position.y;
 			velocity.y = -velocity.y;
 		}
-		else if (position.y > maxY)
+		else if (position.y >= maxY)
 		{
 			position.y = 2.f * maxY - position.y;
 			velocity.y = -velocity.y;

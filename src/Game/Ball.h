@@ -7,5 +7,5 @@ public:
 
 	Ball(sf::Vector2f position);
 
-	bool ReactToCollision(sf::FloatRect rectangle);
+	bool ReactToCollision(const sf::FloatRect& rectangle);
 };
