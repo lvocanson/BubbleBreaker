@@ -6,6 +6,9 @@ namespace Resources
 {
 static constexpr auto WindowSize = sf::Vector2u{1600u, 900u};
 
+static constexpr auto PlaySoloTexture = "res/play solo.png";
+static constexpr auto PlaySoloSize = sf::Vector2f{300.f, 100.f};
+
 static constexpr auto BallTexture = "res/ball.png";
 static constexpr auto BallSize = sf::Vector2f{25.f, 25.f};
 static constexpr auto MinBallSpeed = 300.f;
@@ -30,6 +33,7 @@ static constexpr auto BallSpawnPoint = sf::Vector2f(25.f, 25.f);
 
 static constexpr auto TexturePaths = std::array
 {
+	PlaySoloTexture,
 	BallTexture,
 	BrickTexture,
 	PaddleTexture,

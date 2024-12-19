@@ -1,5 +1,5 @@
 #include "App.h"
-#include "Game/SoloGame.h"
+#include "Game/MainMenu.h"
 #include "Resources.h"
 #include "ResourcesManager.h"
 #include "Utils/Logger.h"
@@ -28,7 +28,7 @@ App::App(int argc, char* argv[])
 	}
 	m_Window.setFramerateLimit(144u);
 
-	m_Game = std::make_unique<SoloGame>(Resources::SoloGameStartHp);
+	m_Game = std::make_unique<MainMenu>(m_Window, m_Game);
 	if (!m_Game.get())
 	{
 		Logger::Instance() << "Failed: game creation.\n";
@@ -90,7 +90,10 @@ void App::PollEvents()
 void App::Update()
 {
 	const float dt = m_FrameClock.restart().asSeconds();
-	m_Game->Update(dt);
+	if (m_Game->Update(dt) == Game::State::Ended)
+	{
+		m_Game = std::make_unique<MainMenu>(m_Window, m_Game);
+	}
 }
 
 void App::Draw()

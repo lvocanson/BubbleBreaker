@@ -49,7 +49,7 @@ void Game::CollisionResolution(const Paddle& currentPaddle)
 			const auto velocity = ball.GetVelocity();
 			const auto currentAngle = velocity.angle();
 			const auto bounceAngle = currentPaddle.CalculateBounceAngle(ball.GetRect(), currentAngle);
-			ball.SetVelocity({ velocity.length(), bounceAngle });
+			ball.SetVelocity({velocity.length(), bounceAngle});
 		}
 	}
 }
@@ -64,6 +64,19 @@ bool Game::IsOutsideOfLimits(const Ball& ball, float dt) const
 		return true;
 	}
 	return false;
+}
+
+Game::GameIterator Game::begin()
+{
+	if (!m_Balls.empty())
+	{
+		return {m_Balls.begin(), this};
+	}
+	if (!m_Bricks.empty())
+	{
+		return {m_Bricks.begin(), this};
+	}
+	return {m_Paddles.begin(), this};
 }
 
 Game::GameIterator& Game::GameIterator::operator++()

@@ -32,9 +32,9 @@ public:
 	*/
 	Game(std::vector<Ball>&& balls, std::vector<Brick>&& bricks, std::vector<Paddle>&& paddles);
 	virtual State Update(float dt);
+	virtual void DrawOn(sf::RenderTarget& target, const sf::RenderStates& states);
 	virtual ~Game() = default;
 
-	void DrawOn(sf::RenderTarget& target, const sf::RenderStates& states);
 
 protected:
 
@@ -74,7 +74,7 @@ protected:
 		Game* m_Owner;
 	};
 
-	GameIterator begin() { return {m_Balls.begin(), this}; }
+	GameIterator begin();
 	GameIterator end() { return {m_Paddles.end()}; }
 
 protected:

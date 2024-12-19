@@ -5,7 +5,7 @@ class SoloGame : public Game
 {
 public:
 
-	SoloGame(int hp);
+	SoloGame();
 	State Update(float dt) override;
 	~SoloGame();
 

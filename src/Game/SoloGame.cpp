@@ -3,7 +3,7 @@
 #include "Utils/Logger.h"
 #include <random>
 
-SoloGame::SoloGame(int hp)
+SoloGame::SoloGame()
 	: Game(
 		{ // Balls
 			{{50.f, 50.f}},
@@ -17,8 +17,8 @@ SoloGame::SoloGame(int hp)
 		},
 		{ // Paddles
 			{{100.f, 800.f}, sf::Keyboard::Key::Left, sf::Keyboard::Key::Right},
-		}),
-		m_PlayerHp(hp)
+		})
+		, m_PlayerHp(Resources::SoloGameStartHp)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
