@@ -36,7 +36,7 @@ bool Ball::ReactToCollision(sf::FloatRect rectangle)
 	float cornerDistance_sq = (distance.x - rectangle.size.x / 2) * (distance.x - rectangle.size.x / 2) +
 		(distance.y - rectangle.size.y / 2) * (distance.y - rectangle.size.y / 2);
 
-	if (cornerDistance_sq <= radius * radius)
+	if (cornerDistance_sq < radius * radius)
 	{
 		//set BallPos relative to rectPos
 		ballPos -= rectOrigin;
@@ -44,30 +44,38 @@ bool Ball::ReactToCollision(sf::FloatRect rectangle)
 		const float ballSpeed = m_Velocity.length();
 		// find the distance that the corner is from the line segment from the balls pos to the next pos
 		const float u = (((rectangle.size.x / 2) - ballPos.x) * m_Velocity.x + ((rectangle.size.y / 2) - ballPos.y) * m_Velocity.y) / (ballSpeed * ballSpeed);
-
 		// get the closest point on the line to the corner
-		float cpx = ballPos.x + m_Velocity.x * u;
-		float cpy = ballPos.y + m_Velocity.y * u;
+		sf::Vector2f cp
+		{
+			ballPos.x + m_Velocity.x * u,
+			ballPos.y + m_Velocity.y * u
+		};
 
 		// get the distance of that point from the corner squared
-		const float dist = (cpx - (rectangle.size.x / 2)) * (cpx - (rectangle.size.x / 2)) + (cpy - (rectangle.size.y / 2)) * (cpy - (rectangle.size.y / 2));
-
+		const float dist = (cp.x - (rectangle.size.x / 2)) * (cp.x - (rectangle.size.x / 2)) + (cp.y - (rectangle.size.y / 2)) * (cp.y - (rectangle.size.y / 2));
 
 		// solves the triangle from center to closest point on balls trajectory
 		float d = sqrt(abs((radius * radius) - dist)) / ballSpeed;
 
-		cpx -= m_Velocity.x * d;
-		cpy -= m_Velocity.y * d;
+		cp.x -= m_Velocity.x * d;
+		cp.y -= m_Velocity.y * d;
 
 		// get the distance from the ball current pos to the intercept point
-		d = sqrt(((cpx - ballPos.x) * (cpx - ballPos.x)) + ((cpy - ballPos.y) * (cpy - ballPos.y)));
-		if (d > ballSpeed) return false;
+		d = sqrt((cp.x - ballPos.x) * (cp.x - ballPos.x) + (cp.y - ballPos.y) * (cp.y - ballPos.y));
+
+		//move the ball form the remaining distance away from the corner
+		const float gap = sqrt((cp.x - ballPos.x) * (cp.x - ballPos.x) + (cp.y - ballPos.y) * (cp.y - ballPos.y));
+		Logger::Instance() << gap << '\n';
+		m_Sprite.move(m_Velocity.normalized() * gap);
+
 
 		// find the normalised tangent at intercept point 
-		const float ty = (cpx - (rectangle.size.x / 2)) / radius;
-		const float tx = -(cpy - (rectangle.size.y / 2)) / radius;
+		const float ty = (cp.x - (rectangle.size.x / 2)) / radius;
+		const float tx = -(cp.y - (rectangle.size.y / 2)) / radius;
 
 		m_Velocity = m_Velocity.normalized();
+
+		Logger::Instance() << cp.x << " ; " << cp.y << " /// " << ballPos.x << " ; " << ballPos.y << '\n';
 
 		//reflectionVector
 		const float dot = (m_Velocity.x * tx + m_Velocity.y * ty) * 2;
@@ -75,6 +83,7 @@ bool Ball::ReactToCollision(sf::FloatRect rectangle)
 		m_Velocity.x = (tx * dot - m_Velocity.x);
 		m_Velocity.y = (ty * dot - m_Velocity.y);
 		m_Velocity = m_Velocity.normalized();
+
 
 		m_Velocity *= ballSpeed;
 

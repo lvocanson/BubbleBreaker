@@ -9,7 +9,7 @@ SoloGame::SoloGame()
 			{{50.f, 50.f}},
 		},
 		{ // Bricks
-			{{100,100},3},
+			//{{100,100},3},
 		},
 		{ // Paddles
 			{{100.f, 800.f}, sf::Keyboard::Key::Left, sf::Keyboard::Key::Right},
