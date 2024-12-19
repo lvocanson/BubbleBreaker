@@ -5,7 +5,7 @@ Game::Game(std::vector<Ball>&& balls, std::vector<Brick>&& bricks, std::vector<P
 	: m_Balls(std::move(balls))
 	, m_Bricks(std::move(bricks))
 	, m_Paddles(std::move(paddles))
-	, m_Background(ResourcesManager::Instance().GetTexture(Resources::BackgroundTexture), sf::FloatRect(sf::Vector2f(0, 0), (sf::Vector2f)Resources::WindowSize))
+	, m_Background(ResourcesManager::Instance().GetTexture(Resources::BackgroundTexture), sf::FloatRect(sf::Vector2f(), sf::Vector2f(Resources::WindowSize)))
 {
 }
 
