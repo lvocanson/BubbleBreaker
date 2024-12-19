@@ -73,3 +73,31 @@ bool Game::IsOutsideOfLimits(const Ball& ball, float dt) const
 	}
 	return false;
 }
+
+Game::GameIterator& Game::GameIterator::operator++()
+{
+	std::visit([this](auto& it) -> void
+		{
+			++it;
+			using ItType = decltype(it);
+			if constexpr (std::equality_comparable_with<ItType, BallIt>)
+			{
+				if (it == m_Owner->m_Balls.end())
+					m_Current = m_Owner->m_Bricks.begin();
+			}
+			if constexpr (std::equality_comparable_with<ItType, BrickIt>)
+			{
+				if (it == m_Owner->m_Bricks.end())
+					m_Current = m_Owner->m_Paddles.begin();
+			}
+		}, m_Current);
+	return *this;
+}
+
+Entity& Game::GameIterator::operator*()
+{
+	return std::visit([](auto& it) -> Entity&
+		{
+			return *it;
+		}, m_Current);
+}
