@@ -98,6 +98,8 @@ protected:
 
 	void CollisionResolution(const Paddle& currentPaddle);
 
+	bool IsOutsideOfLimits(const Ball& ball, float dt);
+
 protected:
 
 	std::vector<Ball> m_Balls;

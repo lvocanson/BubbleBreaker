@@ -61,3 +61,15 @@ void Game::CollisionResolution(const Paddle& currentPaddle)
 		}
 	}
 }
+
+bool Game::IsOutsideOfLimits(const Ball& ball, float dt)
+{
+	sf::FloatRect rect = ball.GetRect();
+
+	const float maxY = m_GameLimits.position.y + m_GameLimits.size.y - rect.size.y;
+	if (rect.position.y + ball.GetVelocity().y * dt >= maxY)
+	{
+		return true;
+	}
+	return false;
+}

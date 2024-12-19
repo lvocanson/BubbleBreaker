@@ -22,6 +22,10 @@ static constexpr auto PaddleMaxBounceAngleResult = sf::degrees(180.f) - PaddleMi
 
 static constexpr auto BackgroundTexture = "res/bg.png";
 
+static constexpr int SoloGameStartHp = 3;
+static constexpr auto BallSpawnPoint = sf::Vector2f(25.f, 25.f);
+
+
 static constexpr auto TexturePaths = std::array
 {
 	BallTexture,
