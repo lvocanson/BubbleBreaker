@@ -51,6 +51,10 @@ void Game::CollisionResolution(const Paddle& currentPaddle)
 
 		if (ball.ReactToCollision(currentPaddle.GetRect()))
 		{
+			const auto velocity = ball.GetVelocity();
+			const auto currentAngle = velocity.angle();
+			const auto bounceAngle = currentPaddle.CalculateBounceAngle(ball.GetRect(), currentAngle);
+			ball.SetVelocity({velocity.length(), bounceAngle});
 		}
 	}
 }

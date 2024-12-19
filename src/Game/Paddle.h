@@ -10,6 +10,14 @@ public:
 
 	void ReactToInput(float dt);
 
+	/**
+	* @brief Calculate the bounce angle of an object against the paddle.
+	* 
+	* @param objRect Position and size of the object
+	* @param angle The angle where this object is heading AFTER the bounce.
+	*/
+	sf::Angle CalculateBounceAngle(const sf::FloatRect& objRect, sf::Angle angle) const;
+
 private:
 
 	sf::Keyboard::Key m_LeftKey;

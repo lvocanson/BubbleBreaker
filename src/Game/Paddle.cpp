@@ -21,3 +21,9 @@ void Paddle::ReactToInput(float dt)
 		m_Sprite.move({Resources::PaddleSpeed * dt, 0.f});
 	}
 }
+
+sf::Angle Paddle::CalculateBounceAngle(const sf::FloatRect& objRect, sf::Angle angle) const
+{
+	// TODO: Change bounce angle the more the object is on the edge
+	return angle;
+}
