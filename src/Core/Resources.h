@@ -14,7 +14,7 @@ static constexpr auto BrickTexture = "res/brick.png";
 static constexpr auto BrickSize = sf::Vector2f{100.f, 50.f};
 
 static constexpr auto PaddleTexture = "res/paddle.png";
-static constexpr auto PaddleSize = sf::Vector2f{100.f, 50.f};
+static constexpr auto PaddleSize = sf::Vector2f{100.f, 25.f};
 static constexpr auto PaddleSpeed = 150.f;
 static constexpr auto PaddleMaxBounceAngleDelta = sf::degrees(45.f);
 static constexpr auto PaddleMinBounceAngleResult = sf::degrees(10.f);
